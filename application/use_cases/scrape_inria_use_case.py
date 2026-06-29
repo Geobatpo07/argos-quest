@@ -1,29 +1,15 @@
 # ./app/use_cases/scrape_inria_use_case.py
 
-from infrastructure.database.unit_of_work import DuckDBUnitOfWork
-from infrastructure.scrapers.inria_scraper import InriaScraper
+from application.services.synchronization_service import (
+    SynchronizationService,
+)
 
 
 class ScrapeInriaUseCase:
-    """Scrape all Inria PhD opportunities and persist them."""
 
-    def __init__(
-        self,
-        scraper: InriaScraper | None = None,
-    ) -> None:
+    def execute(self):
 
-        self.scraper = scraper or InriaScraper()
-
-    def execute(self) -> int:
-
-        theses = self.scraper.scrape()
-
-        with DuckDBUnitOfWork() as uow:
-
-            uow.theses.delete_all()
-
-            uow.theses.save_all(theses)
-
-            uow.commit()
-
-        return len(theses)
+        return (
+            SynchronizationService()
+            .synchronize()
+        )
