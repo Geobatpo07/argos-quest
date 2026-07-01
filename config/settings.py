@@ -8,36 +8,109 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
 
-    app_name: str = Field(alias="APP_NAME")
-    app_version: str = Field(alias="APP_VERSION")
+    # ------------------------------------------------------------------
+    # Application
+    # ------------------------------------------------------------------
 
-    debug: bool = Field(alias="DEBUG")
-    environment: str = Field(alias="ENVIRONMENT")
+    app_name: str = Field(
+        default="Argos Quest",
+        alias="APP_NAME",
+    )
 
-    database_path: Path = Field(alias="DATABASE_PATH")
+    app_version: str = Field(
+        default="0.1.0",
+        alias="APP_VERSION",
+    )
 
-    log_level: str = Field(alias="LOG_LEVEL")
+    debug: bool = Field(
+        default=False,
+        alias="DEBUG",
+    )
 
-    request_timeout: int = Field(alias="REQUEST_TIMEOUT")
+    environment: str = Field(
+        default="production",
+        alias="ENVIRONMENT",
+    )
 
-    user_agent: str = Field(alias="USER_AGENT")
+    # ------------------------------------------------------------------
+    # Database
+    # ------------------------------------------------------------------
 
-    max_retries: int = Field(alias="MAX_RETRIES")
+    database_path: Path = Field(
+        default=Path("data/argos.duckdb"),
+        alias="DATABASE_PATH",
+    )
 
-    request_delay: int = Field(alias="REQUEST_DELAY")
+    # ------------------------------------------------------------------
+    # Logging
+    # ------------------------------------------------------------------
 
-    streamlit_server_port: int = Field(alias="STREAMLIT_SERVER_PORT")
+    log_level: str = Field(
+        default="INFO",
+        alias="LOG_LEVEL",
+    )
 
-    export_path: Path = Field(alias="EXPORT_PATH")
+    # ------------------------------------------------------------------
+    # HTTP
+    # ------------------------------------------------------------------
 
-    cache_path: Path = Field(alias="CACHE_PATH")
+    request_timeout: int = Field(
+        default=30,
+        alias="REQUEST_TIMEOUT",
+    )
 
-    plotly_template: str = Field(alias="PLOTLY_TEMPLATE")
+    user_agent: str = Field(
+        default="ArgosQuest",
+        alias="USER_AGENT",
+    )
+
+    max_retries: int = Field(
+        default=3,
+        alias="MAX_RETRIES",
+    )
+
+    request_delay: int = Field(
+        default=2,
+        alias="REQUEST_DELAY",
+    )
+
+    # ------------------------------------------------------------------
+    # Streamlit
+    # ------------------------------------------------------------------
+
+    streamlit_server_port: int = Field(
+        default=8501,
+        alias="STREAMLIT_SERVER_PORT",
+    )
+
+    # ------------------------------------------------------------------
+    # Paths
+    # ------------------------------------------------------------------
+
+    export_path: Path = Field(
+        default=Path("exports"),
+        alias="EXPORT_PATH",
+    )
+
+    cache_path: Path = Field(
+        default=Path("cache"),
+        alias="CACHE_PATH",
+    )
+
+    # ------------------------------------------------------------------
+    # Plotly
+    # ------------------------------------------------------------------
+
+    plotly_template: str = Field(
+        default="plotly_white",
+        alias="PLOTLY_TEMPLATE",
+    )
 
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
-        populate_by_name=True,
+        case_sensitive=False,
+        extra="ignore",
     )
 
 
