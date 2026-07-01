@@ -102,6 +102,7 @@ class DuckDBThesisRepository(ThesisRepository):
                 scraped_at,
                 created_at
             FROM thesis
+            WHERE deadline >= CURRENT_DATE() OR deadline IS NULL
             ORDER BY scraped_at DESC
             """
         ).fetchall()

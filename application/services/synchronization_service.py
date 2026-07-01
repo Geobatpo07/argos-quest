@@ -1,5 +1,5 @@
 # ./app/services/synchronization_service.py
-
+from application.services.dataframe_service import DataFrameService
 from infrastructure.database.unit_of_work import DuckDBUnitOfWork
 
 from application.services.scraper_registry import (
@@ -27,5 +27,7 @@ class SynchronizationService:
             uow.theses.save_all(theses)
 
             uow.commit()
+
+            DataFrameService.clear_cache()
 
         return len(theses)

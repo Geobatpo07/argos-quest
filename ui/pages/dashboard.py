@@ -1,46 +1,43 @@
 # ./ui/pages/dashboard.py
 
-import streamlit as st
+from application.services.statistics_service import StatisticsService
+from application.services.synchronization_service import SynchronizationService
 
-from application.services.statistics_service import (
-    StatisticsService,
-)
-
-from application.services.synchronization_service import (
-    SynchronizationService,
-)
-
-from ui.components.buttons import sync_button
-from ui.components.metrics import metric
+from ui.components.alerts import success
+from ui.components.buttons import primary_button
+from ui.components.layout import page, section
+from ui.components.metrics import metrics
 
 
 def show_dashboard():
 
-    st.title("⛵ Argos Quest")
+    page(
+        title="Dashboard",
+        icon="🏠",
+        description="Overview of your PhD opportunity tracker.",
+    )
 
-    st.divider()
+    section("Synchronization")
 
-    if sync_button():
+    if primary_button(
+        "Synchronize opportunities",
+        icon="🔄",
+    ):
 
-        with st.spinner(
-            "Synchronisation..."
-        ):
-
-            imported = (
-                SynchronizationService()
-                .synchronize()
-            )
-
-        st.success(
-            f"{imported} offres importées."
+        imported = (
+            SynchronizationService()
+            .synchronize()
         )
 
-    count = (
+        success(
+            f"{imported} opportunities synchronized."
+        )
+
+    section("Overview")
+
+    dashboard = (
         StatisticsService()
-        .thesis_count()
+        .dashboard()
     )
 
-    metric(
-        "Nombre de thèses",
-        count,
-    )
+    metrics(dashboard)
