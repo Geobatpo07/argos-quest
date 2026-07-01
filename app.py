@@ -2,6 +2,8 @@
 
 import streamlit as st
 
+from application.bootstrap import bootstrap
+
 from ui.components.sidebar import sidebar
 
 from ui.pages.analytics import show_analytics
@@ -9,6 +11,12 @@ from ui.pages.dashboard import show_dashboard
 from ui.pages.settings import show_settings
 from ui.pages.sources import show_sources
 from ui.pages.theses import show_theses
+
+# --------------------------------------------------------------------
+# Initialize application
+# --------------------------------------------------------------------
+
+bootstrap()
 
 
 # ---------------------------------------------------------------------

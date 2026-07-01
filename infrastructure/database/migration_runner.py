@@ -101,23 +101,29 @@ class MigrationRunner:
 
     def _apply(self, migration: Path) -> None:
 
-        sql = migration.read_text(
-            encoding="utf-8"
-        )
+        print(f"Applying migration: {migration.name}")
 
-        self.connection.execute(sql)
+        sql = migration.read_text(encoding="utf-8")
 
-        self.connection.execute(
-            """
-            INSERT INTO schema_version
-            (
-                version,
-                applied_at
+        try:
+            self.connection.execute(sql)
+
+            self.connection.execute(
+                """
+                INSERT INTO schema_version(version, applied_at)
+                VALUES (?, ?)
+                """,
+                (
+                    migration.stem,
+                    datetime.now(UTC),
+                ),
             )
-            VALUES (?, ?)
-            """,
-            (
-                migration.stem,
-                datetime.now(UTC),
-            ),
-        )
+
+            print(f"Migration applied: {migration.name}")
+
+        except Exception as exc:
+
+            print(f"Migration failed: {migration.name}")
+            print(exc)
+
+            raise
